@@ -6,6 +6,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 ### Changed
+- Restyled the tag dialog box to handle multiline descriptions and be scrollable.
+
+### Added
+- [Issue 805](https://github.com/aza547/wow-recorder/issues/805) - Automatically generate YouTube compatible timeline for multiview kill videos.
+
+### Fixed
+- Fix the viewpoints counter being cut off if the player name is too long.
+- Upload rendered kill videos if config specifies clip upload.
+- Fix an issue where the default storage path could interacted poorly with OneDrive.
+
+## [7.6.0] - 2026-03-14
+### Added
+- [Issue 777](https://github.com/aza547/wow-recorder/issues/777) - Update M+ timers for Midnight S1.
+- Cloud videos can now be directly clipped.
+- Adds the kill video creator feature.
+
+
+## [7.5.2] - 2026-02-26
 ### Added
 - [Issue 797](https://github.com/aza547/wow-recorder/issues/797) - Add the new devourer spec.
 
