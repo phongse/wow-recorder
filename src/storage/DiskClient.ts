@@ -130,7 +130,9 @@ export default class DiskClient implements StorageClient {
   }
 
   public async deleteVideos(videoPaths: string[]) {
-    videoPaths.forEach((videoPath) => this.deleteVideoDisk(videoPath));
+    for (const videoPath of videoPaths) {
+      await this.deleteVideoDisk(videoPath);
+    }
   }
 
   public async tagVideos(videoPaths: string[], tag: string) {
@@ -215,7 +217,7 @@ export default class DiskClient implements StorageClient {
         String(error),
       );
 
-      markForVideoForDelete(videoPath);
+      await markForVideoForDelete(videoPath);
     }
   }
 
@@ -224,7 +226,7 @@ export default class DiskClient implements StorageClient {
       const videos = args as RendererVideo[];
       const toDelete = videos.filter((v) => !v.cloud).map((v) => v.videoSource);
       if (toDelete.length < 1) return;
-      this.deleteVideos(toDelete);
+      await this.deleteVideos(toDelete);
     });
 
     ipcMain.on('videoButtonDisk', async (_event, args) => {

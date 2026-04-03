@@ -24,7 +24,12 @@ import {
   runFirstTimeSetupActionsObs,
   runFirstTimeSetupActionsNoObs,
 } from './util';
-import { OurDisplayType, SoundAlerts, VideoPlayerSettings } from './types';
+import {
+  OurDisplayType,
+  RendererVideo,
+  SoundAlerts,
+  VideoPlayerSettings,
+} from './types';
 import ConfigService from '../config/ConfigService';
 import Manager from './Manager';
 import AppUpdater from './AppUpdater';
@@ -380,6 +385,40 @@ ipcMain.on('logPath', (_event, args) => {
  */
 ipcMain.on('writeClipboard', (_event, args) => {
   clipboard.writeText(args[0] as string);
+});
+
+/**
+ * Delete videos from local disk and/or cloud storage.
+ */
+ipcMain.on('deleteVideos', async (_event, args) => {
+  const videos = args as RendererVideo[];
+
+  if (videos.length < 1) {
+    return;
+  }
+
+  const disk = videos.filter((v) => !v.cloud).map((v) => v.videoSource);
+  const cloud = videos.filter((v) => v.cloud).map((v) => v.videoName);
+
+  const diskClient = DiskClient.getInstance();
+  const cloudClient = CloudClient.getInstance();
+  const deletionTasks: Promise<void>[] = [];
+
+  if (disk.length > 0) {
+    deletionTasks.push(diskClient.deleteVideos(disk));
+  }
+
+  if (cloud.length > 0) {
+    deletionTasks.push(cloudClient.deleteVideos(cloud));
+  }
+
+  const results = await Promise.allSettled(deletionTasks);
+
+  results.forEach((result) => {
+    if (result.status === 'rejected') {
+      console.error('[Main] Failed deleting selected videos', result.reason);
+    }
+  });
 });
 
 // Enforces serial execution of calls to reconfigureBase. Also has a limit
