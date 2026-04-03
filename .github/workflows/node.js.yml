@@ -5,26 +5,39 @@ name: Warcraft Recorder CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
   build:
-
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Setup Node JS
-      uses: actions/setup-node@v4
-      with:
-        node-version: '22.12.0'
-        cache: 'npm'
+      - uses: actions/checkout@v6
+      - name: Setup Node JS
+        uses: actions/setup-node@v6
+        with:
+          node-version: "22.12.0"
+          cache: "npm"
 
-    - name: Install deps
-      run: npm install
-      
+      - name: Install deps
+        run: npm install
+
+      - name: Build app
+        run: npm run build
+
+      - name: Package installer
+        run: npx electron-builder build --publish never
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: "false"
+
+      - name: Upload installer artifact
+        uses: actions/upload-artifact@v6
+        with:
+          name: WarcraftRecorder-Setup
+          path: release/build/*.exe
+
     # https://github.com/aza547/wow-recorder/issues/737
-    # - name: Run unit tests 
+    # - name: Run unit tests
     #   run: npm test
