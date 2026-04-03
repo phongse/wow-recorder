@@ -5,9 +5,9 @@ name: Warcraft Recorder CI
 
 on:
   push:
-    branches: ["main"]
+    branches: ["patched"]
   pull_request:
-    branches: ["main"]
+    branches: ["patched"]
 
 jobs:
   build:
