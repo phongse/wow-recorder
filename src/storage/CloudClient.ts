@@ -1278,7 +1278,7 @@ export default class CloudClient implements StorageClient {
       const videos = args as RendererVideo[];
       const toDelete = videos.filter((v) => v.cloud).map((v) => v.videoName);
       if (toDelete.length < 1) return;
-      this.deleteVideos(toDelete);
+      await this.deleteVideos(toDelete);
     });
 
     // VideoButton event listeners.
