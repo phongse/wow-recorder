@@ -4,7 +4,7 @@ CWD = os.path.dirname(__file__)
 
 NAME = "raid_reset"
 LOG = f"{CWD}/../../logs/retail/{NAME}.txt"
-OVERRUN = 0 # It's a reset, so no overrun
+OVERRUN = 15  # ENCOUNTER_END non-kills use raid overrun.
 SLEEPS = {
     "ENCOUNTER_END": 2,
 }

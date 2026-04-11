@@ -153,11 +153,8 @@ export default abstract class LogHandler {
     }
 
     const result = Boolean(parseInt(line.arg(5), 10));
-
-    if (result) {
-      const overrun = ConfigService.getInstance().get<number>('raidOverrun');
-      LogHandler.activity.overrun = overrun;
-    }
+    const overrun = ConfigService.getInstance().get<number>('raidOverrun');
+    LogHandler.activity.overrun = overrun;
 
     LogHandler.activity.end(line.date(), result);
     await LogHandler.endActivity();
